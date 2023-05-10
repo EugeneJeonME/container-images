@@ -1,32 +1,13 @@
-FROM postgis/postgis:15-3.3-alpine
+FROM ghcr.io/baosystems/postgis:15-3.3
 
-# 시간을 서울로 변경 처리
+# 시간을 서울로 변경 처리 & ko_KT.UTF-8 로케일 생성
 ENV TZ=Asia/Seoul
-RUN apk add --no-cache tzdata && \
-    cp /usr/share/zoneinfo/$TZ /etc/localtime && \
-    echo $TZ > /etc/timezone
+RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && \
+    sed -i 's/# ko_KR.UTF-8 UTF-8/ko_KR.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen
 
-# Install language pack
-ENV GLIBC_VERSION=2.35-r1
-RUN apk --no-cache add ca-certificates wget && \
-    wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
-    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk && \
-    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-bin-${GLIBC_VERSION}.apk && \
-    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-i18n-${GLIBC_VERSION}.apk && \
-    apk add glibc-bin-${GLIBC_VERSION}.apk glibc-i18n-${GLIBC_VERSION}.apk glibc-${GLIBC_VERSION}.apk
-
-# install ko_KR locale
-# Note that locale -a is not available in alpine linux, use `/usr/glibc-compat/bin/locale -a` instead
-RUN /usr/glibc-compat/bin/localedef -i ko_KR -f UTF-8 ko_KR.UTF-8
-
-RUN /usr/glibc-compat/bin/localedef -i ko_KR -f UTF-8 ko_KR.UTF-8 && \
-    echo "export LANG='ko_KR.UTF-8'" >> /etc/profile && \
-    echo "export LC_ALL='ko_KR.UTF-8'" >> /etc/profile && \
-    echo "export LANGUAGE='ko_KR.UTF-8'" >> /etc/profile
-
-# Set the lang
+# 환경변수 설정
 ENV LANG=ko_KR.UTF-8 \
+		LANGUAGE=ko_KR.UTF-8 \
     LC_ALL=ko_KR.UTF-8 \
-    LANGUAGE=ko_KR.UTF-8
-
-
+    POSTGRES_INITDB_ARGS=--data-checksums
