@@ -1,6 +1,6 @@
 # FROM postgres:14.5-alpine
-# FROM postgres:14.7-alpine
-FROM postgres:15.2-alpine
+FROM postgres:14.7-alpine
+# FROM postgres:15.2-alpine
 
 # 시간을 서울로 변경 처리
 ENV TZ=Asia/Seoul
