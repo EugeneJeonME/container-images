@@ -1,4 +1,6 @@
-FROM ghcr.io/baosystems/postgis:15-3.3
+# https://github.com/baosystems/docker-postgis/pkgs/container/postgis
+# FROM ghcr.io/baosystems/postgis:15-3.3 - 2023.08.29
+FROM ghcr.io/baosystems/postgis:15-3.4
 
 # 시간을 서울로 변경 처리 & ko_KT.UTF-8 로케일 생성
 ENV TZ=Asia/Seoul
