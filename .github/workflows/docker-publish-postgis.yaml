@@ -24,7 +24,7 @@ env:
   IMAGE_NAME: postgis-ko
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
     permissions:
       contents: read
