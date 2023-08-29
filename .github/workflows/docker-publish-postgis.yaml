@@ -14,6 +14,9 @@ on:
   #   paths:
   #     - 'postgis-ko/**'
 
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
 env:
   REGISTRY: ghcr.io
   DIRECTORY: postgis-ko
@@ -68,3 +71,5 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }} # Don't push on PR
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          # secrets: |
+          #   "github_token=${{ secrets.GITHUB_TOKEN }}"
