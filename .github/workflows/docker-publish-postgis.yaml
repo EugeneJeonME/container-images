@@ -26,14 +26,6 @@ env:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        platforms:
-          - linux/amd64
-          # - linux/arm/v6
-          # - linux/arm/v7
-          - linux/arm64
 
     permissions:
       contents: read
@@ -77,9 +69,9 @@ jobs:
         with:
           #context: "{{defaultContext}}:src"
           context: ${{ env.DIRECTORY }}
-          platforms: ${{ matrix.platform }}
+          # https://docs.docker.com/build/ci/github-actions/multi-platform/
+          #platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }} # Don't push on PR
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          # secrets: |
-          #   "github_token=${{ secrets.GITHUB_TOKEN }}"
